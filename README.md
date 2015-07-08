@@ -1,6 +1,6 @@
 # Reddit-Manipulation
 
-So considering Reddit is already pretty crappy these days, I'm going to make it even crappier!
+So considering Reddit is already pretty crappy these days, I'm going to make it even crappier! This will be done by vote manipulation. Creating mass reddit accounts, and then using these accounts to upvote or downvote whatever I want. 
 
 ####PHASE 1: Creating mass reddit accounts
 ---------------------------
