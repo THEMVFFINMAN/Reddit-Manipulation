@@ -72,7 +72,7 @@ def main():
         # Creates a new user based on the string above and appends a number to it
         user = userName + str(x)
     
-        br['user'] = user
+        br['user'] = userName
         br['passwd'] = passWord
         br['passwd2'] = passWord
 
