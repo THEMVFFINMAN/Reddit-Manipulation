@@ -19,22 +19,12 @@ def setTOR():
     socket.socket = socks.socksocket
     socket.create_connection = create_connection
 
-    try:
-        #Checks to see if tor is running
-        subprocess.check_call('pgrep tor', shell = False)
-    except Exception, e:
-        try:
-            #Checks to see if you can restart tor
-            checkTor = subprocess.check_output('service tor restart', shell = True)
+    checkTor = subprocess.check_output('service tor restart', shell = True)
 
-            if "Starting tor daemon...done." in checkTor:
-                print "[+] Started tor daemon for first time"
-            else:
-                print "[-] Error starting tor daemon"
-        except Exception, e:
-            # This is for when you just can't run tor for whatever reason
-            print "[-] Error - Cannot start tor"
-            exit(0)
+    if "Starting tor daemon...done." in checkTor:
+        print "[+] Started tor daemon for first time"
+    else:
+        print "[-] Error starting tor daemon"
 
 # This is our test to see what our ip address is
 def testProxy(url):
@@ -47,13 +37,8 @@ def testProxy(url):
 def main():
     # I cannot recommend this site enough for easily checking your ip address through code
     url = 'https://api.ipify.org?format=json'
-
-    # This graps Tor's process id and prints it out
-    torPID = subprocess.check_output('pgrep tor', shell = True)
-    pid = torPID.split('\n')[0]
-    print "[+] TOR PID: {0}".format(pid)
     
-    # Now we actually test and see what our ip address is
+    # Here we actually test and see what our ip address is
     testProxy(url)
     
     # Finally we restart Tor with some error protection
