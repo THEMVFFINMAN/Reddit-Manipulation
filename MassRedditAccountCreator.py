@@ -149,7 +149,7 @@ def main():
     init_db()
     setTOR()
     # This will create 1000 users with the same password
-    for x in range(1, 1000):
+    for x in range(1000):
         success = False
 
         # Ran into a socks issue that this corrects
