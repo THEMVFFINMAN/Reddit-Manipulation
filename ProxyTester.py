@@ -25,6 +25,7 @@ def setTOR():
         print "[+] Started tor daemon for first time"
     else:
         print "[-] Error starting tor daemon"
+        exit(0)
 
 # This is our test to see what our ip address is
 def testProxy(url):
