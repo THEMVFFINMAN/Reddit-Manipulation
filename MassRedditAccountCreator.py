@@ -1,9 +1,85 @@
-import mechanize, cookielib, random, time, socks, socket, subprocess
+import cookielib
+import random
+import time
+import socket
+import subprocess
+import string
+import sqlite3
+import os
 
+import mechanize
+import socks
+
+
+DB_NAME = 'usernames.db'
+SCHEMA = 'create table usernames (id integer primary key autoincrement not null,name text not null)'
 # For ease of use this will create a bunch of users with the same string followed by a number and the same password
 # This will come in handy further on down the road when we do vote manipulation
-userName = "Some user"
-passWord = "Some password"
+PASSWORD = "Some password"
+
+
+def gen_random_string(len_name=10):
+    """
+    This generates a random string of the specified length using
+    the ASCII characters excluding special chars
+
+    :param len_name: optional. specifies the length of the string to return
+    :returns: random string of specified length
+    """
+    chars = string.ascii_letters + string.digits
+    name = ''
+    for i in range(len_name):
+        idx = random.randint(0, len(chars)-1)
+        name += chars[idx]
+    return name
+
+
+def init_db():
+    """
+    Creates a database file and initializes the table(s)
+    if it does not exist
+
+    :returns: nothing
+    """
+    exists = os.path.exists(DB_NAME)
+    with sqlite3.connect(DB_NAME) as conn:
+        if not exists:
+            conn.executescript(SCHEMA)
+            conn.commit()
+
+
+def insert_to_db(name):
+    """
+    Inserts a username into the table
+
+    :param name: a username string to be inserted
+    :returns: true if inserted, false if the name is already in the db
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT id FROM usernames WHERE name = ?', (name,))
+        data = cursor.fetchone()
+        if not data:
+            # it doesnt exist yet in our db
+            cursor.execute('INSERT INTO usernames (name) values (?)', (name,))
+            conn.commit()
+            return True
+        else:
+            return False
+
+
+def get_all_names():
+    """
+    Gives back a list of all the usernames in the db
+
+    :returns: a list containing all usernames in the db
+    """
+    with sqlite3.connect(DB_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT name FROM usernames')
+        names = cursor.fetchall()
+        return [row[0] for row in names]
+
 
 # Necessary for it to work with mechanize
 def create_connection(address, timeout=None, source_address=None):
@@ -70,9 +146,10 @@ class anonBrowser(mechanize.Browser):
             print "Sleeping Finished"
 
 def main():    
+    init_db()
     setTOR()
     # This will create 1000 users with the same password
-    for x in range(1, 1000):
+    for x in range(1000):
         success = False
 
         # Ran into a socks issue that this corrects
@@ -90,12 +167,15 @@ def main():
 
             br.form = list(br.forms())[0]
 
-            # Creates a new user based on the string above and appends a number to it
-            user = userName + str(x)
-        
+            user = gen_random_string(12)
+            done = insert_to_db(user)
+            while not done:
+                user = gen_random_string(12)
+                done = insert_to_db(user)
+
             br['user'] = user
-            br['passwd'] = passWord
-            br['passwd2'] = passWord
+            br['passwd'] = PASSWORD
+            br['passwd2'] = PASSWORD
 
             br.method = "POST"
             response = br.submit()
