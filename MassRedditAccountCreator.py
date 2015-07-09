@@ -32,6 +32,11 @@ def gen_random_string(len_name=10):
         idx = random.randint(0, len(chars)-1)
         name += chars[idx]
     return name
+    
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-n', type=int, default=100, help='The number of accounts to create')
+    return parser.parse_args()
 
 
 def init_db():
@@ -146,10 +151,11 @@ class anonBrowser(mechanize.Browser):
             print "Sleeping Finished"
 
 def main():    
+    args = get_args()
     init_db()
     setTOR()
     # This will create 1000 users with the same password
-    for x in range(1000):
+    for x in range(args.n):
         success = False
 
         # Ran into a socks issue that this corrects
