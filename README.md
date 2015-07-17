@@ -16,4 +16,6 @@ In the end, TOR seemed to be the only viable option. And even then it's sort of 
 
 Eventually reddit will switch to OAUTH and most of this won't work and won't nearly be this easy. Anyways, the idea is that you'll be able to pass in a reddit link with either upvote or downvote and the accounts will do it. They'll be spaced out by a random number of seconds so as to seem random. 
 
-So the script I have to upvote posts doesn't register. As in I log into the account and it has upvoted the post, but it doesn't affect said post's karma. Currently working on it. 
+It has run into some interesting issues. But unfortunately I think I maybe have been sloppy as my main reddit account was shadowbanned: ![alt text](http://i.imgur.com/md7nJXa.png "RIP /u/blendt")
+
+So until I can figure out how they figured it out, this project is going on hiatus. It just means I'll have to go through many more shadowbanned accounts until I figure this out. 
