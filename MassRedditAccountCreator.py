@@ -6,6 +6,7 @@ import subprocess
 import string
 import sqlite3
 import os
+import argparse
 
 import mechanize
 import socks
@@ -13,9 +14,7 @@ import socks
 
 DB_NAME = 'usernames.db'
 SCHEMA = 'create table usernames (id integer primary key autoincrement not null,name text not null)'
-# For ease of use this will create a bunch of users with the same string followed by a number and the same password
-# This will come in handy further on down the road when we do vote manipulation
-PASSWORD = "Some password"
+PASSWORD = "porpoisepie7"
 
 
 def gen_random_string(len_name=10):
@@ -103,7 +102,7 @@ def setTOR():
     else:
         print "[-] Error starting tor daemon"
 
-# This class if almost verbatim from *Violent Python*
+# This class ia almost verbatim from *Violent Python*
 class anonBrowser(mechanize.Browser):
 
     def __init__(self, user_agents = []):
@@ -150,17 +149,14 @@ def main():
     args = get_args()
     init_db()
     setTOR()
-    # This will create 1000 users with the same password
     for x in range(args.n):
         success = False
 
-        # Ran into a socks issue that this corrects
+        # Whenever we get some error this allows us to have continuity
         while not success:
-    
-            # First we anonymize which also sleeps for 10 minutes
             br = anonBrowser()
             
-            # Next we open up reddit's login and grab the create user form
+            # We open up reddit's login and grab the create user form
             try:
                 br.open('https://www.reddit.com/login')
             except Exception, e:
@@ -193,8 +189,8 @@ def main():
             elif "username can only" in response2:
                 print "[-] User: {0} is an invalid username, can only contain numbers, letters \'-\'' and \'_\'".format(user)
             else:
-                print "[+] {0} successfully created.".format(user)
+                print "[+] {0} successfully created. User: {1}".format(user, x)
                 success = True
 
 if __name__ == "__main__":
-    main()
+    print get_all_names()
