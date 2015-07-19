@@ -50,9 +50,9 @@ def init_db():
             conn.commit()
 
 
-def insert_to_db(name):
+def insert_to_db(name, check):
     """
-    Inserts a username into the table
+    Inserts a username into the table or checks if it exists
     :param name: a username string to be inserted
     :returns: true if inserted, false if the name is already in the db
     """
@@ -62,12 +62,12 @@ def insert_to_db(name):
         data = cursor.fetchone()
         if not data:
             # it doesnt exist yet in our db
-            cursor.execute('INSERT INTO usernames (name) values (?)', (name,))
-            conn.commit()
+            if not check:
+                cursor.execute('INSERT INTO usernames (name) values (?)', (name,))
+                conn.commit()
             return True
         else:
             return False
-
 
 def get_all_names():
     """
@@ -165,11 +165,11 @@ def main():
 
             br.form = list(br.forms())[0]
 
-            user = gen_random_string(12)
-            done = insert_to_db(user)
+            user = gen_random_string(13)
+            done = insert_to_db(user, True)
             while not done:
-                user = gen_random_string(12)
-                done = insert_to_db(user)
+                user = gen_random_string(13)
+                done = insert_to_db(user, True)
 
             br['user'] = user
             br['passwd'] = PASSWORD
@@ -190,7 +190,11 @@ def main():
                 print "[-] User: {0} is an invalid username, can only contain numbers, letters \'-\'' and \'_\'".format(user)
             else:
                 print "[+] {0} successfully created. User: {1}".format(user, x)
+                insert_to_db(user, False)
                 success = True
 
 if __name__ == "__main__":
-    print get_all_names()
+    main()
+    '''for name in get_all_names():
+        print name
+    '''
