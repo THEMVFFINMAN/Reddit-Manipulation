@@ -175,9 +175,12 @@ def main():
             br['passwd'] = PASSWORD
             br['passwd2'] = PASSWORD
 
-            br.method = "POST"
-            response = br.submit()
-            response2 = br.response().read()
+            try:
+                br.method = "POST"
+                response = br.submit()
+                response2 = br.response().read()
+            except Exception, e:
+                print "[-] Http Error, retrying"
 
             # Cleaner error handling
             if "you are doing that too much" in response2:
@@ -195,6 +198,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-    '''for name in get_all_names():
-        print name
-    '''
+    #for name in get_all_names():
+    #    print name
