@@ -19,3 +19,5 @@ Eventually reddit will switch to OAUTH and most of this won't work and won't nea
 It has run into some interesting issues. But unfortunately I think I maybe have been sloppy as my main reddit account was shadowbanned: ![alt text](http://i.imgur.com/md7nJXa.png "RIP /u/blendt")
 
 So until I can figure out how they figured it out, this project is going on hiatus. It just means I'll have to go through many more shadowbanned accounts until I figure this out. 
+
+UPDATE!! So far as long as I space them out about 10 seconds to 20 seconds apart, I can still do upvote/downvote manipulation. So far I've done it successfully for 500 upvotes and it went undetected for 7 days. This was on a subreddit that didn't allow any other posters so it was controlled. Will update after further tests.
