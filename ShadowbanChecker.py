@@ -4,6 +4,11 @@ with the browser type or something like that, they shadowban me. This emails me 
 
 Admins are doing some funky things where they're not shadowbanning me just not allowing me access to accounts I create
 under my fingerprint so I might have to change this a little bit. 
+
+Update: They have now fingerprinted me to my ip address and my browser. So if I use a different ip address or different browser, 
+yes or, as in with my same ip and Firefox I can login fine or a different ip and Chrome. Seems they're running autoban software 
+which is rather disappointing considering they have recently told mods they wouldn't do that.
+
 '''
 import praw
 import smtplib
