@@ -21,3 +21,5 @@ It has run into some interesting issues. But unfortunately I think I maybe have 
 So until I can figure out how they figured it out, this project is going on hiatus. It just means I'll have to go through many more shadowbanned accounts until I figure this out. 
 
 UPDATE!! So far as long as I space them out about 10 seconds to 20 seconds apart, I can still do upvote/downvote manipulation. So far I've done it successfully for 500 upvotes and it went undetected for 7 days. This was on a subreddit that didn't allow any other posters so it was controlled. Will update after further tests.
+
+2nd UPDATE!! So after probing the admins a little bit with a phony victim video, Chad Birch aka /u/deimorz posted why I was banned and it was due to a test I did all under my ip address but apparently they still haven't seen any of the other tests I've done so far. So give me a few days to run some more tests and we're getting close to a fully functional post manipulator. 
