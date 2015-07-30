@@ -14,7 +14,8 @@ class Creator(object):
         name = self.parser.get('database', 'name')
         self.d = utils.Database(name)
         self.c = utils.ColoredOutput()
-        self.br = utils.AnonBrowser()
+        command = self.parser.get('general', 'tor_command')
+        self.br = utils.AnonBrowser(command)
 
     def run(self):    
         for x in range(self.n):

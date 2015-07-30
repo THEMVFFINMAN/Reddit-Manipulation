@@ -94,7 +94,7 @@ class Database(object):
 
 
 class AnonBrowser(mechanize.Browser):
-    def __init__(self, user_agents = []):
+    def __init__(self, command, user_agents = []):
         mechanize.Browser.__init__(self)
         self.set_handle_robots(False)
         self.user_agents = user_agents + ['Mozilla/4.0 ',\
@@ -102,6 +102,7 @@ class AnonBrowser(mechanize.Browser):
         self.cookie_jar = cookielib.CookieJar()
         self.set_cookiejar(self.cookie_jar)
         self._set_socket()
+        self.tor_cmd = command
 
     def _clear_cookies(self):
         self.cookie_jar = cookielib.CookieJar()
@@ -112,15 +113,7 @@ class AnonBrowser(mechanize.Browser):
         self.addheaders = [('User-agent', userAgent)]
 
     def _change_proxy(self):
-        checkTor = subprocess.check_output('systemctl restart tor.service', shell = True) # TODO fix this function
-        # if "Stopping tor daemon...done." and "Starting tor daemon...done." in checkTor:
-        #     print "[+] Restarted tor daemon"
-        # elif "Stopping tor daemon...done." and not "Starting tor daemon...done." in checkTor:
-        #     print "[-] Error starting tor daemon"
-        #     exit(0)
-        # elif not "Stopping tor daemon...done." in checkTor:
-        #     print "[-] Error stopping tor daemon"
-        #     exit(0)
+        checkTor = subprocess.check_output(self.tor_cmd, shell = True)
 
     def anonymize(self, sleep = False):
         self._clear_cookies()
