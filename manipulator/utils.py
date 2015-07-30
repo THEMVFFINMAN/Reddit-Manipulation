@@ -14,7 +14,7 @@ import mechanize
 import socks
 
 
-SCHEMA = 'create table usernames (id integer primary key autoincrement not null,name text not null)'
+SCHEMA = 'create table usernames (id integer primary key autoincrement not null,name text not null,password text not null)'
 
 
 class ColoredOutput(object):
@@ -56,7 +56,7 @@ class Database(object):
                 conn.executescript(SCHEMA)
                 conn.commit()
 
-    def insert(self, name, check):
+    def insert(self, name, password, check):
         """
         Inserts a username into the table or checks if it exists
         :param name: a username string to be inserted
@@ -69,7 +69,7 @@ class Database(object):
             if not data:
                 # it doesnt exist yet in our db
                 if not check:
-                    cursor.execute('INSERT INTO usernames (name) values (?)', (name,))
+                    cursor.execute('INSERT INTO usernames (name, password) values (?,?)', (name,password))
                     conn.commit()
                 return True
             else:
