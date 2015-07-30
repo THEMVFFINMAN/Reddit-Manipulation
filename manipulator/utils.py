@@ -20,7 +20,6 @@ import mechanize
 import socks
 
 
-DB_NAME = 'usernames.db'
 SCHEMA = 'create table usernames (id integer primary key autoincrement not null,name text not null)'
 
 
@@ -41,11 +40,12 @@ class ColoredOutput(object):
 
 
 class Database(object):
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self._init_db()
 
     def delete(self, username):
-        with sqlite3.connect(DB_NAME) as conn:
+        with sqlite3.connect(name) as conn:
             cursor = conn.cursor()
             cursor.execute('DELETE FROM usernames WHERE name = ?', (username,))
             conn.commit()
@@ -56,9 +56,9 @@ class Database(object):
         if it does not exist
         :returns: nothing
         """
-        exists = os.path.exists(DB_NAME)
+        exists = os.path.exists(name)
         if not exists:
-            with sqlite3.connect(DB_NAME) as conn:
+            with sqlite3.connect(name) as conn:
                 conn.executescript(SCHEMA)
                 conn.commit()
 
@@ -68,7 +68,7 @@ class Database(object):
         :param name: a username string to be inserted
         :returns: true if inserted, false if the name is already in the db
         """
-        with sqlite3.connect(DB_NAME) as conn:
+        with sqlite3.connect(name) as conn:
             cursor = conn.cursor()
             cursor.execute('SELECT id FROM usernames WHERE name = ?', (name,))
             data = cursor.fetchone()
@@ -86,7 +86,7 @@ class Database(object):
         Gives back a list of all the usernames in the db
         :returns: a list containing all usernames in the db
         """
-        with sqlite3.connect(DB_NAME) as conn:
+        with sqlite3.connect(name) as conn:
             cursor = conn.cursor()
             cursor.execute('SELECT name FROM usernames')
             names = cursor.fetchall()
