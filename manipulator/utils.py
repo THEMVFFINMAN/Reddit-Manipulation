@@ -111,9 +111,8 @@ class AnonBrowser(mechanize.Browser):
         userAgent = random.choice(self.user_agents)
         self.addheaders = [('User-agent', userAgent)]
 
-    # This gets a new ip by resetting tor
     def _change_proxy(self):
-        checkTor = subprocess.check_output('systemctl restart tor.service', shell = True)
+        checkTor = subprocess.check_output('systemctl restart tor.service', shell = True) # TODO fix this function
         # if "Stopping tor daemon...done." and "Starting tor daemon...done." in checkTor:
         #     print "[+] Restarted tor daemon"
         # elif "Stopping tor daemon...done." and not "Starting tor daemon...done." in checkTor:

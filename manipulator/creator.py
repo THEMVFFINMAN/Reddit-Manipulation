@@ -52,8 +52,9 @@ class Creator(object):
                     rateLocation = response2.find("you are doing that too much. try again in ")
                     rateLimit = int(response2[rateLocation + 42 : rateLocation + 44])
                     self.c.print_error('Rate limiting detected. Try again in {0} minutes'.format(rateLimit))
-                    self.c.print_error('Sleeping for {} minutes'.format(rateLimit))
-                    time.sleep(int(rateLimit))
+                    self.br.anonymize()
+                    # self.c.print_error('Sleeping for {} minutes'.format(rateLimit))
+                    # time.sleep(int(rateLimit))
                 elif "that username is already taken" in response2:
                     self.c.print_error('User: {0} already exists'.format(user))
                 elif "username can only" in response2:
