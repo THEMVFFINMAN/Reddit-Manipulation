@@ -37,7 +37,15 @@ Just in case your bots start getting banned (which is unlikely), there is a clas
 ```
 
 This will check all of your bots in the database.
-Currently, checking one user is not supported.
+
+```
+>>> import manipulator
+>>> s = manipulator.Shadow('/path/to/config.ini')
+>>> s.check_user('someusername')
+```
+
+This will check a specific username.
+It returns True if the user was shadow banned and has been deleted from your database, False otherwise.
 
 ## ToDo
 

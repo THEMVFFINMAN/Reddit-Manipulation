@@ -6,12 +6,6 @@ import sqlite3
 import string
 import subprocess
 import time
-try:
-    from urllib.request import urlopen
-    from urllib.error import HTTPError
-except:
-    from urllib2 import urlopen
-    from urllib2 import HTTPError
 
 from colorama import deinit
 from colorama import Fore
@@ -146,22 +140,6 @@ def gen_random_string(len_name=10):
         idx = random.randint(0, len(chars)-1)
         name += chars[idx]
     return name
-
-
-def check_user(username):
-    while True:
-        try:
-            r = urlopen('https://www.reddit.com/u/{}'.format(username)).read()
-            return False
-        except HTTPError as e:
-            if e.code == 400:
-                Database().delete(username)
-                return True
-            elif e.code == 429:
-                continue
-            else:
-                print(e)
-                continue
 
 
 def create_connection(address, timeout=None, source_address=None):
