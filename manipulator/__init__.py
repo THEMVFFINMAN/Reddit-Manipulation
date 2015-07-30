@@ -1,3 +1,3 @@
-import creator
-import shadow
-import voter
+from .creator import Creator
+from .shadow import Shadow
+# import voter
