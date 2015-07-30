@@ -1,25 +1,45 @@
 # Reddit-Manipulation
 
-So considering Reddit is already pretty crappy these days, I'm going to make it even crappier! This will be done by vote manipulation. Creating mass reddit accounts, and then using these accounts to upvote or downvote whatever I want. 
+This is a library for carrying out vote manipulation on Reddit.
+It creates fake users for you which can be used to upvote/downvote posts and comments.
 
-####PHASE 1: Creating mass reddit accounts
----------------------------
+## Installation
 
-So the basis of this portion comes from the book *Violent Python* by TJ O'Connor. Most of what I'll be using is from a python reddit api called [PRAW](https://praw.readthedocs.org/en/v3.0.0/). But considering it doesn't really do much for account creation (and for good reason) we're going to be going through that part in Mechanize. 
+`python setup.py install` will install the library and all of its dependencies.
+See `requirements.txt` for a list of current dependencies.
+This list should not change in future updates.
 
-The first issue I came across is using an actual proxy in order to make reddit think we are unique visitors, so as to not get rate limited. The list of proxies I had wasn't accurately hiding my ip and I actually wrote [a test script](https://github.com/THEMVFFINMAN/Reddit-Manipulation/blob/master/ProxyTester.py) to verify if it was used correctly. 
+## Use
 
-In the end, TOR seemed to be the only viable option. And even then it's sort of hacky as you have to constantly restart the TOR daemon. But it works and I made like a 1000 accounts in an hour or so. 
+### Account creation
 
-####PHASE 2: Post manipulation
----------------------------
+```
+>>> import manipulator
+>>> c = manipulator.Creator('/path/to/config.ini')
+>>> c.run()
+```
+This will use the values specified in `config.ini` to get the number of accounts to create and the password to use for each account.
+The `config.ini` also needs to have an absolute path to a database file specified.
+After the call to `c.run()` completes you will have `n` new accounts in your database.
 
-Eventually reddit will switch to OAUTH and most of this won't work and won't nearly be this easy. Anyways, the idea is that you'll be able to pass in a reddit link with either upvote or downvote and the accounts will do it. They'll be spaced out by a random number of seconds so as to seem random. 
+### Manipulation
 
-It has run into some interesting issues. But unfortunately I think I maybe have been sloppy as my main reddit account was shadowbanned: ![alt text](http://i.imgur.com/md7nJXa.png "RIP /u/blendt")
+*FILL ME IN*
 
-So until I can figure out how they figured it out, this project is going on hiatus. It just means I'll have to go through many more shadowbanned accounts until I figure this out. 
+### Ban checking
 
-UPDATE!! So far as long as I space them out about 10 seconds to 20 seconds apart, I can still do upvote/downvote manipulation. So far I've done it successfully for 500 upvotes and it went undetected for 7 days. This was on a subreddit that didn't allow any other posters so it was controlled. Will update after further tests.
+Just in case your bots start getting banned (which is unlikely), there is a class for checking all of your bots.
 
-2nd UPDATE!! So after probing the admins a little bit with a phony victim video, Chad Birch aka /u/deimorz posted why I was banned and it was due to a test I did all under my ip address but apparently they still haven't seen any of the other tests I've done so far. So give me a few days to run some more tests and we're getting close to a fully functional post manipulator. 
+```
+>>> import manipulator
+>>> s = manipulator.Shadow('/path/to/config.ini')
+>>> s.run()
+```
+
+This will check all of your bots in the database.
+Currently, checking one user is not supported.
+
+## ToDo
+
+* Proper vote manipulation using `mechanize` (currently uses `praw`)
+* Vote manipulation of comments (only can handle upvoting posts)
