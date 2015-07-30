@@ -39,7 +39,7 @@ class Database(object):
         self._init_db()
 
     def delete(self, username):
-        with sqlite3.connect(name) as conn:
+        with sqlite3.connect(self.name) as conn:
             cursor = conn.cursor()
             cursor.execute('DELETE FROM usernames WHERE name = ?', (username,))
             conn.commit()
@@ -50,9 +50,9 @@ class Database(object):
         if it does not exist
         :returns: nothing
         """
-        exists = os.path.exists(name)
+        exists = os.path.exists(self.name)
         if not exists:
-            with sqlite3.connect(name) as conn:
+            with sqlite3.connect(self.name) as conn:
                 conn.executescript(SCHEMA)
                 conn.commit()
 
@@ -62,7 +62,7 @@ class Database(object):
         :param name: a username string to be inserted
         :returns: true if inserted, false if the name is already in the db
         """
-        with sqlite3.connect(name) as conn:
+        with sqlite3.connect(self.name) as conn:
             cursor = conn.cursor()
             cursor.execute('SELECT id FROM usernames WHERE name = ?', (name,))
             data = cursor.fetchone()
@@ -80,7 +80,7 @@ class Database(object):
         Gives back a list of all the usernames in the db
         :returns: a list containing all usernames in the db
         """
-        with sqlite3.connect(name) as conn:
+        with sqlite3.connect(self.name) as conn:
             cursor = conn.cursor()
             cursor.execute('SELECT name FROM usernames')
             names = cursor.fetchall()

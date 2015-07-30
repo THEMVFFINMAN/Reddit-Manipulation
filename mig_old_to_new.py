@@ -3,7 +3,7 @@ Temporary script to migrate first db to new db schema
 '''
 import os
 
-import utils
+from manipulator import utils
 
 
 d = utils.Database('usernames.db')
