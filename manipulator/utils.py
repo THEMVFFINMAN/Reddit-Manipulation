@@ -113,7 +113,7 @@ class AnonBrowser(mechanize.Browser):
         self.addheaders = [('User-agent', userAgent)]
 
     def _change_proxy(self):
-        checkTor = subprocess.check_output(self.tor_cmd, shell = True)
+        subprocess.call(self.tor_cmd.split(), shell=False) # should check return code, but we'll just assume it works
 
     def anonymize(self, sleep = False):
         self._clear_cookies()
