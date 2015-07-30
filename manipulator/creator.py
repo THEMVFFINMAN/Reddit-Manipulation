@@ -7,14 +7,18 @@ import utils
 
 class Creator(object):
     def __init__(self, config):
+        self.c = utils.ColoredOutput()
         self.parser = SafeConfigParser()
         self.parser.read(config)
-        self.n = self.parser.getint('creator', 'num_accounts')
-        self.password = self.parser.get('creator', 'password')
-        name = self.parser.get('database', 'name')
+        self.n = self.parser.getint('creator', 'num_accounts', vars={'num_accounts': 100})
+        self.c.print_good('Will create {} accounts'.format(self.n))
+        self.password = self.parser.get('creator', 'password', vars={'password': 'adminssuck'})
+        self.c.print_good('Using password: {}'.format(self.password))
+        name = self.parser.get('database', 'name', vars={'name': '~/usernames.db'})
+        self.c.print_good('Using database: {}'.format(name))
         self.d = utils.Database(name)
-        self.c = utils.ColoredOutput()
         command = self.parser.get('general', 'tor_command')
+        self.c.print_good('Using tor command: {}'.format(command))
         self.br = utils.AnonBrowser(command)
 
     def run(self):    

@@ -2,6 +2,7 @@
 
 This is a library for carrying out vote manipulation on Reddit.
 It creates fake users for you which can be used to upvote/downvote posts and comments.
+Because it interacts with the Tor daemon, and I only use Tor on Linux, this only works on Linux.
 
 ## Installation
 
@@ -9,7 +10,14 @@ It creates fake users for you which can be used to upvote/downvote posts and com
 See `requirements.txt` for a list of current dependencies.
 This list should not change in future updates.
 
+Also ensure that the Tor daemon is installed on your machine.
+
 ## Use
+
+See the included `config.ini` for what variables you have control over.
+Note that the `tor_command` variable is absolutely necessary.
+It should be the command used on your system to restart the Tor service.
+The other variables have default values specified in the code.
 
 ### Account creation
 
@@ -51,3 +59,4 @@ It returns True if the user was shadow banned and has been deleted from your dat
 
 * Proper vote manipulation using `mechanize` (currently uses `praw`)
 * Vote manipulation of comments (only can handle upvoting posts)
+* Python 3 compatibility (it might be already...don't know)

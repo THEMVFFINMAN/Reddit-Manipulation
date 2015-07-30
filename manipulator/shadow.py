@@ -11,11 +11,12 @@ import utils
 
 class Shadow(object):
     def __init__(self, config):
+        self.c = utils.ColoredOutput()
         self.parser = SafeConfigParser()
         self.parser.read(config)
-        name = self.parser.get('database', 'name')
+        name = self.parser.get('database', 'name', vars={'name': '~/usernames.db'})
+        self.c.print_good('Using database: {}'.format(name))
         self.d = utils.Database(name)
-        self.c = utils.ColoredOutput()
         self.names = d.get_all_names()
 
     def check_user(self, username):
