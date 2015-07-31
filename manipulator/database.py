@@ -125,3 +125,9 @@ class Database(object):
             cursor.execute('SELECT * FROM usernames')
             rows = cursor.fetchall()
             return rows
+
+    def destroy_db(self):
+        with sqlite3.connect(self.name) as conn:
+            cursor = conn.cursor()
+            cursor.execute('DROP TABLE usernames')
+            conn.commit()
