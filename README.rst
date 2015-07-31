@@ -46,19 +46,11 @@ Just in case your bots start getting banned (which is unlikely), there is a clas
 
     >>> import manipulator
     >>> s = manipulator.shadow.Shadow()
-    >>> s.run(names)
-
-This will check all of your bots specified in the list called names.
-You can obtian this list using the ``Database`` object.
-
-::
-
-    >>> import manipulator
-    >>> s = manipulator.shadow.Shadow()
     >>> s.check_user('someusername')
 
 This will check a specific username.
-It returns True if the user was shadow banned and has been deleted from your database, False otherwise.
+It returns True if the user was shadow banned, False otherwise.
+Put this in a loop to check all the desired users and delete them if they are banned.
 
 Database management
 ~~~~~~~~~~~~~~~~~~~
