@@ -1,34 +1,23 @@
-import os
 import re
 import time
-from ConfigParser import SafeConfigParser
 
 import utils
 
 
 class Creator(object):
-    def __init__(self, config):
-        db_name = os.path.expanduser('~/usernames.db')
-        defaults = {
-            'num_accounts': '100',
-            'password': 'adminssuck',
-            'db_name': db_name
-        }
+    def __init__(self, db_name, tor_command, num_accounts=100, password='adminssuck'):
         self.c = utils.ColoredOutput()
-        self._check_tilda(config)
-        self.parser = SafeConfigParser(defaults=defaults)
-        self.parser.read(config)
-        self.n = int(self.parser.get('creator', 'num_accounts'))
+        self.n = num_accounts
         self.c.print_good('Will create {} accounts'.format(self.n))
-        self.password = self.parser.get('creator', 'password')
+        self.password = password
         self.c.print_good('Using password: {}'.format(self.password))
-        name = self.parser.get('database', 'db_name')
-        self._check_tilda(name)
-        self.c.print_good('Using database: {}'.format(name))
-        self.d = utils.Database(name)
-        command = self.parser.get('general', 'tor_command')
-        self.c.print_good('Using tor command: {}'.format(command))
-        self.br = utils.AnonBrowser(command)
+        self._check_tilda(db_name)
+        self.db_name = db_name
+        self.c.print_good('Using database: {}'.format(self.db_name))
+        self.d = utils.Database(self.db_name)
+        self.tor_command = tor_command
+        self.c.print_good('Using tor command: {}'.format(self.tor_command))
+        self.br = utils.AnonBrowser(self.tor_command)
 
     def _check_tilda(self, s):
         if s.startswith('~'):

@@ -14,21 +14,22 @@ Also ensure that the Tor daemon is installed on your machine.
 
 ## Use
 
-See the included `config.ini` for what variables you have control over.
-Note that the `tor_command` variable is absolutely necessary.
-It should be the command used on your system to restart the Tor service.
-The other variables have default values specified in the code.
-
 ### Account creation
 
 ```
 >>> import manipulator
->>> c = manipulator.Creator('/path/to/config.ini')
+>>> c = manipulator.Creator('/path/to/my.db', 'service tor restart', 5, 'somepassword')
 >>> c.run()
 ```
-This will use the values specified in `config.ini` to get the number of accounts to create and the password to use for each account.
-The `config.ini` also needs to have an absolute path to a database file specified.
-After the call to `c.run()` completes you will have `n` new accounts in your database.
+
+The path to the database must be the absolute path.
+The command to restart the tor daemon is system dependant.
+Veryify what it is on your system.
+If you have `sysvinit` on your OS then it will look like `service tor restart`.
+If you have `systemd` on your OS then it will look like `systemctl restart tor.service`.
+Note that in order to run these commands you will need the necessary system privileges.
+This means you will have to run your command with `sudo` or as root.
+After the call to `c.run()` completes you will have 5 new accounts in your database, each using the password "somepassword".
 
 ### Manipulation
 
@@ -40,7 +41,7 @@ Just in case your bots start getting banned (which is unlikely), there is a clas
 
 ```
 >>> import manipulator
->>> s = manipulator.Shadow('/path/to/config.ini')
+>>> s = manipulator.Shadow('/path/to/my.db')
 >>> s.run()
 ```
 
@@ -48,7 +49,7 @@ This will check all of your bots in the database.
 
 ```
 >>> import manipulator
->>> s = manipulator.Shadow('/path/to/config.ini')
+>>> s = manipulator.Shadow('/path/to/my.db')
 >>> s.check_user('someusername')
 ```
 

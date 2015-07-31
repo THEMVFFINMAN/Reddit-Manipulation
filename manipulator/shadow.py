@@ -4,7 +4,6 @@ try:
 except:
     from urllib2 import urlopen
     from urllib2 import HTTPError
-import os
 import time
 from ConfigParser import SafeConfigParser
 
@@ -12,19 +11,12 @@ import utils
 
 
 class Shadow(object):
-    def __init__(self, config):
-        name = os.path.expanduser('~/usernames.db')
-        defaults = {
-            'db_name': name
-        }
+    def __init__(self, db_name):
         self.c = utils.ColoredOutput()
-        self._check_tilda(config)
-        self.parser = SafeConfigParser(defaults=defaults)
-        self.parser.read(config)
-        name = self.parser.get('database', 'db_name')
-        self._check_tilda(name)
-        self.c.print_good('Using database: {}'.format(name))
-        self.d = utils.Database(name)
+        self._check_tilda(db_name)
+        self.db_name = db_name
+        self.c.print_good('Using database: {}'.format(self.db_name))
+        self.d = utils.Database(self.db_name)
         self.names = self.d.get_all_names()
 
     def _check_tilda(self, s):
