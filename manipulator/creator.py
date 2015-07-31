@@ -1,3 +1,6 @@
+"""
+Provides classes and methods for creating bots
+"""
 import re
 import time
 
@@ -6,6 +9,9 @@ import utils
 
 
 class Creator(object):
+    """
+    Class for creating Reddit bot accounts
+    """
     def __init__(self, db_name, tor_command, num_accounts=100, password='adminssuck'):
         self.c = utils.ColoredOutput()
         self.n = num_accounts
@@ -21,10 +27,19 @@ class Creator(object):
         self.br = utils.AnonBrowser(self.tor_command)
 
     def _check_tilda(self, s):
+        """
+        ~ is not expanded by sqlite3, so raise error if it is in there
+
+        :param str s: String to check
+        :raises: ValueError
+        """
         if s.startswith('~'):
             raise ValueError('Tildas not allowed. They break things.')
 
     def run(self):    
+        """
+        Runs the creator and makes new accounts based on params from initialization
+        """
         for x in range(self.n):
             success = False
             self.br.anonymize()

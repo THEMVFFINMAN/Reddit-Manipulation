@@ -5,7 +5,7 @@ except ImportError:
 
 
 NAME = 'manipulator'
-VERSION = '0.1'
+VERSION = '1.0'
 
 
 setup(

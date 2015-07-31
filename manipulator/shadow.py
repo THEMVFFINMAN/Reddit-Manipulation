@@ -1,3 +1,6 @@
+"""
+Provides class for checking if a bot is shadow banned
+"""
 try:
     from urllib.request import urlopen
     from urllib.error import HTTPError
@@ -5,26 +8,28 @@ except:
     from urllib2 import urlopen
     from urllib2 import HTTPError
 import time
-from ConfigParser import SafeConfigParser
 
-import database
 import utils
 
 
 class Shadow(object):
-    def __init__(self, db_name):
+    """
+    Class providing methods for checking is a user is shadow banned
+    """
+    def __init__(self):
+        """
+        Initializes instance. Adds ColoredOutput instance for printing in self.run()
+        """
         self.c = utils.ColoredOutput()
-        self._check_tilda(db_name)
-        self.db_name = db_name
-        self.c.print_good('Using database: {}'.format(self.db_name))
-        self.d = database.Database(self.db_name)
-        self.names = self.d.get_all_names()
-
-    def _check_tilda(self, s):
-        if s.startswith('~'):
-            raise ValueError('Tildas not allowed. They break things.')
 
     def check_user(self, username):
+        """
+        Checks if username is shadowbanned or non-existant
+
+        :param str username: Username to check
+        :return: False if not banned, True if banned
+        :rtype: bool
+        """
         while True:
             try:
                 r = urlopen('https://www.reddit.com/u/{}'.format(username)).read()
@@ -39,9 +44,14 @@ class Shadow(object):
                     print(e)
                     continue
 
-    def run(self):
+    def run(self, names):
+        """
+        Checks all names specified for shadow ban
+
+        :param list names: List of all names to check
+        """
         cnt = 0
-        for name in self.names:
+        for name in names:
             if self.check_user(name):
                 self.c.print_error('{} is shadow banned and has been removed'.format(name))
                 cnt += 1

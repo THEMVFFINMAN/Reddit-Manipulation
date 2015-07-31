@@ -1,3 +1,6 @@
+"""
+Provides classes and methods for voting with bots
+"""
 # This whole thing will probably get redone because not only have I tried
 # To make PRAW use a TOR socket, I have also added the TOR proxy to the praw.ini file
 # Yet even though I've test upvoted posts about 500 times, the post is unchanced

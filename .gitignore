@@ -4,3 +4,6 @@
 build
 dist
 manipulator.egg-info
+docs/_build
+docs/modules.rst
+docs/manipulator.rst
