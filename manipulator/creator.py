@@ -1,6 +1,7 @@
 import re
 import time
 
+import database
 import utils
 
 
@@ -14,7 +15,7 @@ class Creator(object):
         self._check_tilda(db_name)
         self.db_name = db_name
         self.c.print_good('Using database: {}'.format(self.db_name))
-        self.d = utils.Database(self.db_name)
+        self.d = database.Database(self.db_name)
         self.tor_command = tor_command
         self.c.print_good('Using tor command: {}'.format(self.tor_command))
         self.br = utils.AnonBrowser(self.tor_command)
@@ -38,10 +39,10 @@ class Creator(object):
                 self.br.form = list(self.br.forms())[0]
 
                 user = utils.gen_random_string(13)
-                done = self.d.insert(user, self.password, True)
+                done = self.d.insert(user, self.password)
                 while not done:
                     user = utils.gen_random_string(13)
-                    done = self.d.insert(user, self.password, True)
+                    done = self.d.insert(user, self.password)
 
                 self.br['user'] = user
                 self.br['passwd'] = self.password
@@ -67,7 +68,7 @@ class Creator(object):
                 elif "username can only" in response2:
                     self.c.print_error("User: {0} is an invalid username, can only contain numbers, letters \'-\'' and \'_\'".format(user))
                 else:
-                    self.d.insert(user, self.password, False)
+                    self.d.insert(user, self.password)
                     success = True
                     self.c.print_good('{} successfully created. User: {}'.format(user, x))
             time.sleep(2)

@@ -7,6 +7,7 @@ except:
 import time
 from ConfigParser import SafeConfigParser
 
+import database
 import utils
 
 
@@ -16,7 +17,7 @@ class Shadow(object):
         self._check_tilda(db_name)
         self.db_name = db_name
         self.c.print_good('Using database: {}'.format(self.db_name))
-        self.d = utils.Database(self.db_name)
+        self.d = database.Database(self.db_name)
         self.names = self.d.get_all_names()
 
     def _check_tilda(self, s):
