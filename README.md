@@ -56,6 +56,19 @@ This will check all of your bots in the database.
 This will check a specific username.
 It returns True if the user was shadow banned and has been deleted from your database, False otherwise.
 
+### Database management
+
+In case you want to play with your database of bots, the `Database` class is provided.
+`Creator` and `Shadow` use it under-the-hood, but the class provides other methods not used by them for db management.
+
+```
+>>> import manipulator
+>>> d = manipulator.Database('/path/to/my.db')
+```
+
+You can now insert new users, delete users by name, get all entries, get a single entry, get all entries with a certain password,
+or drop everything. If the need exists, you can also check if a user is in the db.
+
 ## ToDo
 
 * Proper vote manipulation using `mechanize` (currently uses `praw`)
