@@ -20,7 +20,7 @@ Account creation
 ::
 
     >>> import manipulator
-    >>> c = manipulator.Creator('/path/to/my.db', 'service tor restart', 5, 'somepassword')
+    >>> c = manipulator.creator.Creator('/path/to/my.db', 'service tor restart', 5, 'somepassword')
     >>> c.run()
 
 The path to the database must be the absolute path.
@@ -45,7 +45,7 @@ Just in case your bots start getting banned (which is unlikely), there is a clas
 ::
 
     >>> import manipulator
-    >>> s = manipulator.Shadow()
+    >>> s = manipulator.shadow.Shadow()
     >>> s.run(names)
 
 This will check all of your bots specified in the list called names.
@@ -54,7 +54,7 @@ You can obtian this list using the ``Database`` object.
 ::
 
     >>> import manipulator
-    >>> s = manipulator.Shadow()
+    >>> s = manipulator.shadow.Shadow()
     >>> s.check_user('someusername')
 
 This will check a specific username.
@@ -69,7 +69,7 @@ In case you want to play with your database of bots, the ``Database`` class is p
 ::
 
     >>> import manipulator
-    >>> d = manipulator.Database('/path/to/my.db')
+    >>> d = manipulator.database.Database('/path/to/my.db')
 
 You can now insert new users, delete users by name, get all entries, get a single entry, get all entries with a certain password,
 or drop everything. If the need exists, you can also check if a user is in the db.
