@@ -74,6 +74,8 @@ From the root directory of this project, run ``sphinx-apidoc -f -o docs/ manipul
 Then change into the ``docs`` directory and run ``make html``.
 The freshly built docs will be in ``docs/_build/html``.
 
+You can see a live version of the docs at http://thaweatherman.pythonanywhere.com.
+
 ToDo
 ----
 
