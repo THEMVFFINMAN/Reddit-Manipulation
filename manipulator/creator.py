@@ -1,3 +1,4 @@
+import os
 import re
 import time
 from ConfigParser import SafeConfigParser
@@ -7,19 +8,31 @@ import utils
 
 class Creator(object):
     def __init__(self, config):
+        db_name = os.path.expanduser('~/usernames.db')
+        defaults = {
+            'num_accounts': '100',
+            'password': 'adminssuck',
+            'db_name': db_name
+        }
         self.c = utils.ColoredOutput()
-        self.parser = SafeConfigParser()
+        self._check_tilda(config)
+        self.parser = SafeConfigParser(defaults=defaults)
         self.parser.read(config)
-        self.n = self.parser.getint('creator', 'num_accounts', vars={'num_accounts': 100})
+        self.n = int(self.parser.get('creator', 'num_accounts'))
         self.c.print_good('Will create {} accounts'.format(self.n))
-        self.password = self.parser.get('creator', 'password', vars={'password': 'adminssuck'})
+        self.password = self.parser.get('creator', 'password')
         self.c.print_good('Using password: {}'.format(self.password))
-        name = self.parser.get('database', 'name', vars={'name': '~/usernames.db'})
+        name = self.parser.get('database', 'db_name')
+        self._check_tilda(name)
         self.c.print_good('Using database: {}'.format(name))
         self.d = utils.Database(name)
         command = self.parser.get('general', 'tor_command')
         self.c.print_good('Using tor command: {}'.format(command))
         self.br = utils.AnonBrowser(command)
+
+    def _check_tilda(self, s):
+        if s.startswith('~'):
+            raise ValueError('Tildas not allowed. They break things.')
 
     def run(self):    
         for x in range(self.n):
@@ -68,3 +81,4 @@ class Creator(object):
                     self.d.insert(user, self.password, False)
                     success = True
                     self.c.print_good('{} successfully created. User: {}'.format(user, x))
+            time.sleep(2)
