@@ -49,12 +49,16 @@ class Database(object):
 
         :param str name: Name of the bot being inserted
         :param str password: Password of the bot being inserted
+        :return: True if inserted, False if not
+        :rtype: bool
         """
         if not self.check_username(name):
             with sqlite3.connect(self.name) as conn:
                 cursor = conn.cursor()
-                cursor.execute('INSERT INTO usernames (name, password) values (?,?)', (name,password))
+                cursor.execute('INSERT INTO usernames (name,password) values (?,?)', (name,password))
                 conn.commit()
+                return True
+        return False
 
     def check_username(self, username):
         """
