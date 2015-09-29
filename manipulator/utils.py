@@ -8,6 +8,7 @@ import string
 import subprocess
 import time
 
+import requests
 from colorama import deinit
 from colorama import Fore
 from colorama import init
@@ -49,6 +50,99 @@ class ColoredOutput(object):
         Deinitializes colorama
         """
         deinit()
+
+
+class RedAPI(object):
+    """
+    """
+    def __init__(self):
+        self.hdrs = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Referer': 'https://www.reddit.com',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+        self.create_payload = {
+            'api_type': 'json',
+            'passwd2': '',
+            'op': 'reg',
+            'passwd': '',
+            'dest': 'https%3A%2F%2Fwww.reddit.com%2F',
+            'user': ''
+        }
+        self.create_url = 'https://www.reddit.com/api/register/'
+        self.login_payload = {
+            'op': 'login',
+            'api_type': 'json',
+            'user': '',
+            'passwd': '',
+            'dest': 'https%3A%2F%2Fwww.reddit.com%2F'
+        }
+        self.login_url = 'https://www.reddit.com/api/login/'
+        self.vote_url = 'https://www.reddit.com/api/vote'
+    
+    def create(self, username, password):
+        """
+        Creates a new reddit user
+        
+        :param str username: username of account to create
+        :param str password: password of account to create
+        """
+        url = self.create_url + username
+        self.create_payload['user'] = username
+        self.create_payload['passwd'] = password
+        self.create_payload['passwd2'] = password
+        while True:
+            r = requests.post(url, data=self.create_payload, headers=self.hdrs)
+            if not r.json()['json']['errors']:
+                break
+            # print(r.json()['json']['errors'])
+            # SHORT_PASSWORD, USERNAME_TAKEN
+            time.sleep(0.5)
+
+    def login(self, username, password):
+        """
+        Logs in to reddit and creates a requests Session to use for
+        follow-up requests via this object
+        
+        :param str username: username to login with
+        :param str password: password to login with
+        """
+        self.session = requests.Session()
+        self.login_payload['user'] = username
+        self.login_payload['passwd'] = password
+        url = self.login_url + username
+        while True:
+            r = self.session.post(url, headers=self.hdrs, data=self.login_payload)
+            if not r.json()['json']['errors']:
+                self.modhash = r.json()['json']['data']['modhash']
+                break
+            # print(r.json()['json']['errors'])
+            time.sleep(0.5)
+
+    def vote(self, vote, id, subreddit):
+        """
+        Vote on specified comment or post.
+        ID should be something like t1_cvhfg0h
+
+        :param str vote: 1, -1, or 0 as a string
+        :param str id: post or comment id
+        :param str subreddit: the subreddit name the post is in
+        """
+        payload = {
+            'id': id,
+            'dir': vote,
+            'r': subreddit,
+            'uh': self.modhash
+        }
+        while True:
+            r = self.session.post(self.vote_url, headers=self.hdrs, data=payload)
+            # print(r.json())
+            # print(r.status_code)
+            if not r.text:
+                break
+            # print(r.json()['json']['errors'])
+            time.sleep(0.5)
 
 
 class AnonBrowser(mechanize.Browser):
