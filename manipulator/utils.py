@@ -55,9 +55,12 @@ class ColoredOutput(object):
 class RedAPI(object):
     """
     """
-    def __init__(self):
+    def __init__(self, tor_cmd):
+        self.user_agents = [
+            'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+        ]
         self.hdrs = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
+            'User-Agent': '',
             'X-Requested-With': 'XMLHttpRequest',
             'Referer': 'https://www.reddit.com',
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -80,6 +83,9 @@ class RedAPI(object):
         }
         self.login_url = 'https://www.reddit.com/api/login/'
         self.vote_url = 'https://www.reddit.com/api/vote'
+        self.tor_cmd = tor_cmd
+        self._set_socket()
+        self.anonymize()
     
     def create(self, username, password):
         """
@@ -144,6 +150,33 @@ class RedAPI(object):
             # print(r.json()['json']['errors'])
             time.sleep(0.5)
 
+    def logout(self):
+        """
+        Destroy the session for the logged in user
+        """
+        self.modhash = ''
+        self.session = None
+
+    def _change_user_agent(self):
+        self.hdrs['User-agent'] = random.choice(self.user_agents)
+
+    def _change_proxy(self):
+        subprocess.call(self.tor_cmd.split(), shell=False) # should check return code, but we'll just assume it works
+
+    def anonymize(self):
+        """
+        Clears cookies, changes user agent, restarts Tor (for new IP)
+        """
+        self._change_user_agent()
+        self._change_proxy()
+
+    def _set_socket(self):
+        socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
+        #patch the socket module
+        socket.socket = socks.socksocket
+
+    def test(self):
+        return requests.get('http://icanhazip.com')
 
 class AnonBrowser(mechanize.Browser):
     """
