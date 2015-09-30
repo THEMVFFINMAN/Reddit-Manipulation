@@ -8,8 +8,8 @@ except:
     from urllib2 import urlopen
     from urllib2 import HTTPError
 
-from database import Database
-import utils
+from .database import Database
+from .utils import ColoredOutput
 import os
 
 
@@ -53,7 +53,7 @@ class Shadow(object):
         :return: none
         :rtype: void
         """
-        self.c = utils.ColoredOutput()
+        self.c = ColoredOutput()
         self.db_name = database
         self.c.print_good('Using database: {}'.format(self.db_name))
         self.d = Database(self.db_name)
