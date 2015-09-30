@@ -104,6 +104,8 @@ class RedAPI(object):
                 continue
             if r.json()['json']['errors']:
                 raise Exception(r.json()['json']['errors'])
+            else:
+                return
 
     def login(self, username, password):
         """
@@ -119,11 +121,12 @@ class RedAPI(object):
         url = self.login_url + username
         while True:
             r = self.session.post(url, headers=self.hdrs, data=self.login_payload)
-            if not r.json()['json']['errors']:
-                self.modhash = r.json()['json']['data']['modhash']
-                break
-            # print(r.json()['json']['errors'])
-            time.sleep(0.5)
+            if r.status_code != 200:
+                continue
+            if r.json()['json']['errors']:
+                raise Exception(r.json()['json']['errors'])
+            self.modhash = r.json()['json']['data']['modhash']
+            return
 
     def vote(self, vote, id, subreddit):
         """
@@ -142,12 +145,12 @@ class RedAPI(object):
         }
         while True:
             r = self.session.post(self.vote_url, headers=self.hdrs, data=payload)
-            # print(r.json())
-            # print(r.status_code)
+            if r.status_code != 200:
+                continue
             if not r.text:
-                break
-            # print(r.json()['json']['errors'])
-            time.sleep(0.5)
+                return
+            else:
+                raise Exception('Voting failed. Might be the ID')
 
     def logout(self):
         """
