@@ -1,4 +1,4 @@
-.. image:: http://swiftkey.com/en/wp-content/uploads/2014/07/reddit-logo.jpg
+.. image:: https://www.redditstatic.com/about/assets/reddit-logo.png
 
 This is a library for carrying out vote manipulation on Reddit.
 It creates fake users for you which can be used to upvote/downvote posts and comments.
