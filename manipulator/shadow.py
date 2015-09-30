@@ -53,7 +53,7 @@ class Shadow(object):
         :return: none
         :rtype: void
         """
-        self.c = ColoredOutput()
+        self.c = utils.ColoredOutput()
         self.db_name = database
         self.c.print_good('Using database: {}'.format(self.db_name))
         self.d = Database(self.db_name)
@@ -61,25 +61,14 @@ class Shadow(object):
         user_count = 1
         try:
             for username in self.d.get_all_names():
-                while True:
-                    try:
-                        r = urlopen('https://www.reddit.com/u/{}'.format(username)).read()
-                        user_count = user_count + 1
+                user_count = user_count + 1
 
-                        if (user_count % 10 == 0):
-                            self.c.print_good("{} users checked".format(user_count))
-                        break
-                    except HTTPError as e:
-                        if e.code == 404:
-                            self.c.print_error("{} was shadowbanned".format(username))
-                            self.d.delete(username)
-                            user_count = user_count + 1
-                            break
-                        elif e.code == 429:
-                            continue
-                        else:
-                            print(e)
-                            continue
+                if self.check_user(username):
+                    self.c.print_error("{} was shadowbanned".format(username))
+                    self.d.delete(username)
+
+                if user_count % 10 == 0:
+                    self.c.print_good("{} accounts checked".format(user_count))
         except:
             self.c.print_error("Table usernames doesn't exist")
 
