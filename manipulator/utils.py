@@ -94,17 +94,19 @@ class RedAPI(object):
         :param str username: username of account to create
         :param str password: password of account to create
         """
+        if len(password) < 6:
+            return False
         url = self.create_url + username
         self.create_payload['user'] = username
         self.create_payload['passwd'] = password
         self.create_payload['passwd2'] = password
         while True:
             r = requests.post(url, data=self.create_payload, headers=self.hdrs)
+            if r.status_code != 200:
+                continue
             if not r.json()['json']['errors']:
-                break
-            # print(r.json()['json']['errors'])
-            # SHORT_PASSWORD, USERNAME_TAKEN
-            time.sleep(0.5)
+                return True
+            return False
 
     def login(self, username, password):
         """
