@@ -85,5 +85,5 @@ class Creator(object):
                 else:
                     self.d.insert(user, self.password)
                     success = True
-                    self.c.print_good('{} successfully created. User: {}'.format(user, x))
+                    self.c.print_good('{} successfully created. User: {}'.format(user, x + 1))
             time.sleep(2)
