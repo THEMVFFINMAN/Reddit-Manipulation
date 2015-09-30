@@ -5,7 +5,7 @@ except ImportError:
 
 
 NAME = 'manipulator'
-VERSION = '1.0'
+VERSION = '1.1'
 
 
 setup(
@@ -15,8 +15,8 @@ setup(
     description='A library for vote manipulation on Reddit',
     install_requires=[
         'colorama',
-        'mechanize',
-        'pysocks'
+        'pysocks',
+        'requests'
     ],
     packages=[NAME]
 )

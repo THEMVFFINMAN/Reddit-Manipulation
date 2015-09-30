@@ -21,23 +21,27 @@ Account creation
 
 ::
 
-    >>> import manipulator
-    >>> c = manipulator.creator.Creator('/path/to/my.db', 'service tor restart', 5, 'somepassword')
-    >>> c.run()
+    >>> from manipulator import Manipulator
+    >>> m = Manipulator('service tor restart')
+    >>> m.create('someusername', 'somepassword')
 
-The path to the database must be the absolute path.
 The command to restart the tor daemon is system dependant.
 Veryify what it is on your system.
 If you have ``sysvinit`` on your OS then it will look like ``service tor restart``.
 If you have ``systemd`` on your OS then it will look like ``systemctl restart tor.service``.
 Note that in order to run these commands you will need the necessary system privileges.
 This means you will have to run your command with ``sudo`` or as root.
-After the call to ``c.run()`` completes you will have 5 new accounts in your database, each using the password "somepassword".
+If there is an issue with the account creation, an exception will be raised.
+It is best to wrap the call in a try/except clause.
 
 Manipulation
 ~~~~~~~~~~~~
 
-*FILL ME IN*
+Assuming you have created a ``Manipulator`` object, vote manipulation is simple.
+This class exposes a ``vote()`` function that takes in a value of 1, -1, or 0
+along with a post or comment ID and the subreddit name.
+If I were downvoting a post in ``/r/learnpython`` I would do ``m.vote(-1, 't3_id', 'learnpython')``.
+For a post, prepend ``t3_`` to the ID from the URL, and ``t1_`` for a comment.
 
 Ban checking
 ~~~~~~~~~~~~
@@ -46,8 +50,8 @@ Just in case your bots start getting banned (which is unlikely), there is a clas
 
 ::
 
-    >>> import manipulator
-    >>> s = manipulator.shadow.Shadow()
+    >>> from manipulator import Shadow
+    >>> s = Shadow()
     >>> s.check_user('someusername')
 
 This will check a specific username.
@@ -58,12 +62,12 @@ Database management
 ~~~~~~~~~~~~~~~~~~~
 
 In case you want to play with your database of bots, the ``Database`` class is provided.
-``Creator`` and ``Shadow`` use it under-the-hood, but the class provides other methods not used by them for db management.
+You can use whatever data store you like, but this class is provided for ease of use.
 
 ::
 
-    >>> import manipulator
-    >>> d = manipulator.database.Database('/path/to/my.db')
+    >>> from manipulator import Database
+    >>> d = Database('/path/to/my.db')
 
 You can now insert new users, delete users by name, get all entries, get a single entry, get all entries with a certain password,
 or drop everything. If the need exists, you can also check if a user is in the db.
@@ -77,10 +81,9 @@ Then change into the ``docs`` directory and run ``make html``.
 The freshly built docs will be in ``docs/_build/html``.
 
 You can see a live version of the docs at http://thaweatherman.pythonanywhere.com.
+Actually, no you can't because it isn't there any more.
 
 ToDo
 ----
 
-* Proper vote manipulation using ``mechanize`` (currently uses ``praw``)
-* Vote manipulation of comments (only can handle upvoting posts)
 * Python 3 compatibility (it might be already...don't know)
