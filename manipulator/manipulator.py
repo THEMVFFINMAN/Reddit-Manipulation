@@ -87,12 +87,12 @@ class Manipulator(object):
         Vote on specified comment or post.
         ID should be something like t1_cvhfg0h
 
-        :param str vote: 1, -1, or 0 as a string
+        :param int vote: 1, -1, or 0 as an int (not string)
         :param str id: post or comment id
         :param str subreddit: the subreddit name the post is in
         """
         payload = {
-            'id': id,
+            'id': int(id),
             'dir': vote,
             'r': subreddit,
             'uh': self.modhash
