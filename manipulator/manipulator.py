@@ -1,10 +1,9 @@
 import random
-import socket
-import subprocess
-
 import requests
+import socket
 import socks
-
+import subprocess
+import time
 
 class Manipulator(object):
     """
@@ -40,6 +39,7 @@ class Manipulator(object):
         self.tor_cmd = tor_cmd
         self._set_socket()
         self.anonymize()
+        print "[+] Initialized Manipulator successfully"
     
     def create(self, username, password):
         """
@@ -115,9 +115,14 @@ class Manipulator(object):
 
     def _change_user_agent(self):
         self.hdrs['User-agent'] = random.choice(self.user_agents)
+        print "[+] Changed User Agent Successfully"
 
     def _change_proxy(self):
+        print "[+] Initializing Tor"
         subprocess.call(self.tor_cmd.split(), shell=False) # should check return code, but we'll just assume it works
+        print "[+] Waiting 5 seconds for Tor to restart"
+        time.sleep(5)
+        print "[+] Changed proxy successfully"
 
     def anonymize(self):
         """
@@ -127,9 +132,12 @@ class Manipulator(object):
         self._change_proxy()
 
     def _set_socket(self):
-        socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 9050)
+        socks.setdefaultproxy(socks.SOCKS5, "127.0.0.1", 9050)
         #patch the socket module
         socket.socket = socks.socksocket
+        
+        print "[+] Set Socket Successfully"
+        
 
     def test(self):
-        return requests.get('http://icanhazip.com')
+        return "[+] IP Adress: {}".format(requests.get('http://icanhazip.com').text)
