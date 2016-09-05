@@ -94,7 +94,7 @@ class Manipulator(object):
         payload = {
             'id': int(id),
             'dir': vote,
-            'r': subreddit,
+            'sr': subreddit,
             'uh': self.modhash
         }
         while True:
